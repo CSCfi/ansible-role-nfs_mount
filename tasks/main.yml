@@ -8,7 +8,7 @@
   file: path=/scratch state=directory mode=0755
 
 - name: cleanning previous entries on /etc/fstab
-  lineinfile: dest=/etc/fstab regexp="^.*\b(nfs4)\b.*$" line="{{ nfs_mount }}" state=absent
+  lineinfile: backup=yes dest=/etc/fstab regexp="^.*\b(nfs4|home)\b.*$" line="{{ nfs_mount }}" state=absent
   when: nfs_mount is defined
 
 - name: populate /etc/fstab file with NFS mount points

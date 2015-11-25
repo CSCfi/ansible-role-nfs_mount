@@ -1,17 +1,23 @@
-Role Name
+[![Build Status](https://travis-ci.org/CSC-IT-Center-for-Science/ansible-role-nfs_mount.svg)](https://travis-ci.org/CSC-IT-Center-for-Science/ansible-role-nfs_mount)
+ansible-role-nfs_mount
 =========
 
-A brief description of the role goes here.
+Mounts NFS
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+An NFS server
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+For example:
+<pre>
+nfs_mount: |
+  10.2.1.5:/scratch /scratch                nfs4 defaults 0 0
+  10.2.1.5:/home    /home                   nfs4 defaults 0 0
+</pre>
 
 Dependencies
 ------------
@@ -25,14 +31,12 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: ansible-role-nfs_mount }
 
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).

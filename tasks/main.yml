@@ -15,5 +15,9 @@
   lineinfile: dest=/etc/fstab line="{{ nfs_mount }}" state=present
   when: nfs_mount is defined
 
+- name: cleanning blank lines on /etc/fstab
+  lineinfile: backup=no dest=/etc/fstab regexp="^\s*$" state=absent
+  when: nfs_mount is defined
+
 - name: reloading mount points
   command: /usr/bin/mount -a

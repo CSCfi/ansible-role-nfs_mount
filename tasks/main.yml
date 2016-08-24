@@ -3,9 +3,11 @@
 
 - name: Creates /home dir (if it doesn't exist)
   file: path=/home state=directory mode=0755
+  when: nfs_mount is defined
 
 - name: Creates /scratch dir (if it doesn't exist)
   file: path=/scratch state=directory mode=0755
+  when: nfs_mount is defined
 
 ## old method using lineinfile and editing fstab 
 
@@ -30,6 +32,10 @@
   when: nfs_mount is defined
 
 ## new method with the mount module
+
+- name: Create directories (if they do not exist) if nfs_mounts is defined
+  file: path={{ item.name }} state=directory mode=0755
+  when: nfs_mounts is defined and nfs_mounts.0 != {} and nfs_mount is not defined
 
 - name: add mountpoints if nfs_mounts is defined and nfs_mount is not
   mount:

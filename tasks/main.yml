@@ -3,25 +3,46 @@
 
 - name: Creates /home dir (if it doesn't exist)
   file: path=/home state=directory mode=0755
+  when: nfs_mount is defined
 
 - name: Creates /scratch dir (if it doesn't exist)
   file: path=/scratch state=directory mode=0755
+  when: nfs_mount is defined
 
-- name: cleanning previous entries on /etc/fstab
+## old method using lineinfile and editing fstab 
+
+- name: lineinfile cleaning previous entries on /etc/fstab
   lineinfile: backup=yes dest=/etc/fstab regexp=".*\home\b.*$" state=absent
   when: nfs_mount is defined
 
-- name: cleanning previous entries on /etc/fstab
+- name: lineinfile cleaning previous entries on /etc/fstab
   lineinfile: backup=yes dest=/etc/fstab regexp=^{{ nfs_mount_addr }} state=absent
   when: nfs_mount is defined
 
-- name: populate /etc/fstab file with NFS mount points
+- name: lineinfile populate /etc/fstab file with NFS mount points
   lineinfile: dest=/etc/fstab line="{{ nfs_mount }}" state=present
   when: nfs_mount is defined
 
-- name: cleaning blank lines on /etc/fstab
+- name: lineinfile cleaning blank lines on /etc/fstab
   lineinfile: backup=no dest=/etc/fstab regexp="^\s*$" state=absent
   when: nfs_mount is defined
 
-- name: reloading mount points
+- name: reloading mount points with mount -a
   command: /usr/bin/mount -a
+  when: nfs_mount is defined
+
+## new method with the mount module
+
+- name: Create directories (if they do not exist) if nfs_mounts is defined
+  file: path={{ item.name }} state=directory mode=0755
+  when: nfs_mounts is defined and nfs_mounts.0 != {} and nfs_mount is not defined
+
+- name: add mountpoints if nfs_mounts is defined and nfs_mount is not
+  mount:
+        fstype="{{ item.fstype | default('nfs4') }}"
+        name="{{ item.name }}"  
+        src="{{ item.src }}"  
+        state="{{ item.state | default('mounted') }}"
+        opts="{{ item.opts | default('defaults') }}"
+  with_items: "{{ nfs_mounts }}"
+  when: nfs_mounts is defined and nfs_mounts.0 != {} and nfs_mount is not defined

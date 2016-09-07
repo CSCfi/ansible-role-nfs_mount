@@ -1,8 +1,16 @@
 ---
 # defaults file for ansible-role-nfs_mount/
+## old method which uses the ansible lineinfile module to modify fstab
 # #Define something like this:
 #
 # nfs_mount: |
 #  10.2.1.5:/scratch /scratch                nfs4 defaults 0 0
 #  10.2.1.5:/home    /home                   nfs4 defaults 0 0
 #
+
+## new method which uses the ansible mount module
+nfs_mounts:
+  - {}
+# - { fstype: "nfs4", name: "/home", src: "{{ nfs_mount_addr }}:/home", state: "mounted", opts: "defaults" }
+# - { name: "/scratch", src: "{{ nfs_mount_addr }}:/scratch" }
+

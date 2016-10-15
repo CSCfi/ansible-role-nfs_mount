@@ -1,33 +1,33 @@
 ---
 # tasks file for ansible-role-nfs_mount/
 
-- name: Creates /home dir (if it doesn't exist)
+- name: (DEPRECATED) Creates /home dir (if it doesn't exist)
   file: path=/home state=directory mode=0755
   when: nfs_mount is defined
 
-- name: Creates /scratch dir (if it doesn't exist)
+- name: (DEPRECATED) Creates /scratch dir (if it doesn't exist)
   file: path=/scratch state=directory mode=0755
   when: nfs_mount is defined
 
 ## old method using lineinfile and editing fstab 
 
-- name: lineinfile cleaning previous entries on /etc/fstab
+- name: (DEPRECATED) lineinfile cleaning previous entries on /etc/fstab
   lineinfile: backup=yes dest=/etc/fstab regexp=".*\home\b.*$" state=absent
   when: nfs_mount is defined
 
-- name: lineinfile cleaning previous entries on /etc/fstab
+- name: (DEPRECATED) lineinfile cleaning previous entries on /etc/fstab
   lineinfile: backup=yes dest=/etc/fstab regexp=^{{ nfs_mount_addr }} state=absent
   when: nfs_mount is defined
 
-- name: lineinfile populate /etc/fstab file with NFS mount points
+- name: (DEPRECATED) lineinfile populate /etc/fstab file with NFS mount points
   lineinfile: dest=/etc/fstab line="{{ nfs_mount }}" state=present
   when: nfs_mount is defined
 
-- name: lineinfile cleaning blank lines on /etc/fstab
+- name: (DEPRECATED) lineinfile cleaning blank lines on /etc/fstab
   lineinfile: backup=no dest=/etc/fstab regexp="^\s*$" state=absent
   when: nfs_mount is defined
 
-- name: reloading mount points with mount -a
+- name: (DEPRECATED) reloading mount points with mount -a
   command: /usr/bin/mount -a
   when: nfs_mount is defined
 
@@ -47,3 +47,14 @@
         opts="{{ item.opts | default('defaults') }}"
   with_items: "{{ nfs_mounts }}"
   when: nfs_mounts is defined and nfs_mounts.0 != {} and nfs_mount is not defined
+
+## Clean fstab backup files
+
+- shell: ls -1 /etc/fstab.201*
+  register: backup_files
+  ignore_errors: true
+
+- name: cleaning fstab backup files
+  file: path={{ item }} state=absent
+  with_items: '{{ backup_files.stdout_lines }}'
+  when: clean_fstab_backups and backup_files.stdout_lines != {}

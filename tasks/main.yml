@@ -52,7 +52,8 @@
 
 - shell: ls -1 /etc/fstab.201*
   register: backup_files
-  ignore_errors: true
+  changed_when: False
+  always_run: True
 
 - name: cleaning fstab backup files
   file: path={{ item }} state=absent

@@ -2,5 +2,8 @@
 
  - hosts: localhost
    remote_user: root
+   pre_tasks:
+     - name: touch a fstab test file
+       file: path="/etc/fstab.2016-10-20@15:21:01~" state=touch
    roles:
      - ansible-role-nfs_mount

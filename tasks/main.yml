@@ -56,7 +56,7 @@
 
 - debug: var=nfs_backup_files
 
-#- name: cleaning fstab backup files
-#  file: path={{ item }} state=absent
-#  with_items: '{{ nfs_backup_files.stdout_lines }}'
-#  when: clean_fstab_backups and nfs_backup_files.stdout_lines != {}
+- name: cleaning fstab backup files
+  file: path={{ item }} state=absent
+  with_items: '{{ nfs_backup_files.files }}'
+  when: clean_fstab_backups and nfs_backup_files.matched != 0

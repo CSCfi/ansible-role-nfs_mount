@@ -48,15 +48,15 @@
   with_items: "{{ nfs_mounts }}"
   when: nfs_mounts is defined and nfs_mounts.0 != {} and nfs_mount is not defined
 
-- name: list backed up fstab files
-  shell: ls -1 /etc/fstab.201*
-  register: backup_files
+- name: find backed up fstab files
+  find: paths=/etc patterns="fstab.201*"
+  register: nfs_backup_files
   changed_when: False
   always_run: True
-  failed_when: backup_files.rc != 2 or backup_files.rc != 0
-  # rc2 - no files, rc0 - lists
 
-- name: cleaning fstab backup files
-  file: path={{ item }} state=absent
-  with_items: '{{ backup_files.stdout_lines }}'
-  when: clean_fstab_backups and backup_files.stdout_lines != {}
+- debug: var=nfs_backup_files
+
+#- name: cleaning fstab backup files
+#  file: path={{ item }} state=absent
+#  with_items: '{{ nfs_backup_files.stdout_lines }}'
+#  when: clean_fstab_backups and nfs_backup_files.stdout_lines != {}

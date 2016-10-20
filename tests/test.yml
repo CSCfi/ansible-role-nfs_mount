@@ -5,5 +5,7 @@
    pre_tasks:
      - name: touch a fstab test file
        file: path="/etc/fstab.2016-10-20@15:21:01~" state=touch
+   vars:
+     - clean_fstab_backups: True
    roles:
      - ansible-role-nfs_mount

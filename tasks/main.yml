@@ -52,7 +52,7 @@
   find: paths=/etc patterns="fstab.201*"
   register: nfs_backup_files
   changed_when: False
-  check_mode: yes
+  check_mode: no
 
 - debug: var=nfs_backup_files verbosity=1
 

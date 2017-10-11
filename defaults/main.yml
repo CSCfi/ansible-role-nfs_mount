@@ -12,8 +12,7 @@
 nfs_mounts:
   - {}
 # - { fstype: "nfs4", name: "/home", src: "{{ nfs_mount_addr }}:/home", state: "mounted", opts: "defaults" }
-# - { name: "/scratch", src: "{{ nfs_mount_addr }}:/scratch" }
+# - { name: "/scratch", src: "{{ nfs_mount_addr }}:/scratch", dirmode: "1777"}
 
 #Overwite this to true in your playbook's variables or simply include "-e clean_fstab_backups=True" if you want to remove old fstab backup files created by bug #4
 clean_fstab_backups: False
-

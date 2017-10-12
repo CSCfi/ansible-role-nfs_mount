@@ -34,7 +34,7 @@
 ## new method with the mount module
 
 - name: Create directories (if they do not exist) if nfs_mounts is defined
-  file: path={{ item.name }} state=directory mode=0755
+  file: path={{ item.name }} state=directory mode="{{ item.dirmode | default ('0755') }}"
   with_items: "{{ nfs_mounts }}"
   when: nfs_mounts is defined and nfs_mounts.0 != {} and nfs_mount is not defined
 

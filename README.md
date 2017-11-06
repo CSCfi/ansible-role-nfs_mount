@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/CSC-IT-Center-for-Science/ansible-role-nfs_mount.svg)](https://travis-ci.org/CSC-IT-Center-for-Science/ansible-role-nfs_mount)
+[![Build Status](https://travis-ci.org/CSCfi/ansible-role-nfs_mount.svg)](https://travis-ci.org/CSCfi/ansible-role-nfs_mount)
 ansible-role-nfs_mount
 =========
 

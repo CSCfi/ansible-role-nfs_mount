@@ -126,6 +126,7 @@ function show_fstab() {
 	echo %%%%% fstab follows
 	cat /etc/fstab
 	echo %%%%% fstab ends
+}
 
 set -e
 function main(){

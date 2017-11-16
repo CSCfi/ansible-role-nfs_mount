@@ -15,7 +15,7 @@
   lineinfile:
        backup: no
        dest: /etc/fstab
-       regexp: ".*\home\b.*$"
+       regexp: ".*/home\b.*$"
        state: absent
   when: nfs_mount is defined
 

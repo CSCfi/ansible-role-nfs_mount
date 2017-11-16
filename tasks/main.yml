@@ -15,7 +15,7 @@
   lineinfile:
        backup: no
        dest: /etc/fstab
-       regexp: =".*\home\b.*$"
+       regexp: ".*\home\b.*$"
        state: absent
   when: nfs_mount is defined
 
@@ -38,7 +38,8 @@
 - name: (DEPRECATED) lineinfile cleaning blank lines on /etc/fstab
   lineinfile: 
        dest: /etc/fstab
-       regexp: "^\s*$" state=absent
+       regexp: "^\s*$"
+       state: absent
        backup: no
   when: nfs_mount is defined
 

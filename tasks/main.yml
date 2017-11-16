@@ -2,11 +2,17 @@
 # tasks file for ansible-role-nfs_mount/
 
 - name: (DEPRECATED) Creates /home dir (if it doesn't exist)
-  file: path=/home state=directory mode=0755
+  file: 
+     path: /home
+     state: directory
+     mode: 0755
   when: nfs_mount is defined
 
 - name: (DEPRECATED) Creates /scratch dir (if it doesn't exist)
-  file: path=/scratch state=directory mode=0755
+  file: 
+     path: "/scratch"
+     state: directory
+     mode: 0755
   when: nfs_mount is defined
 
 ## old method using lineinfile and editing fstab 
@@ -23,7 +29,7 @@
   lineinfile: 
        backup: no
        dest: /etc/fstab
-       regexp: ^{{ nfs_mount_addr }}
+       regexp: "^{{ nfs_mount_addr }}"
        state: absent
   when: nfs_mount is defined
 
@@ -51,7 +57,7 @@
 
 - name: Create directories (if they do not exist) if nfs_mounts is defined
   file: 
-     path: {{ item.name }}
+     path: "{{ item.name }}"
      state: directory
      mode: "{{ item.dirmode | default ('0755') }}"
   with_items: "{{ nfs_mounts }}"
@@ -69,12 +75,15 @@
 
 - name: find backed up fstab files
   find: 
-      paths=/etc patterns="fstab.*~"
+      paths: "/etc" 
+      patterns: "fstab.*~"
   register: nfs_backup_files
   changed_when: False
   check_mode: no
 
-- debug: var=nfs_backup_files verbosity=1
+- debug:
+     var: nfs_backup_files
+     verbosity: 1
 
 - name: cleaning fstab backup files
   file: 

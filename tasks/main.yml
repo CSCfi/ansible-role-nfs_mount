@@ -38,7 +38,7 @@
 - name: (DEPRECATED) lineinfile cleaning blank lines on /etc/fstab
   lineinfile: 
        dest: /etc/fstab
-       regexp: "^\s*$"
+       regexp: "^\\s*$"
        state: absent
        backup: no
   when: nfs_mount is defined

@@ -122,6 +122,11 @@ function extra_tests(){
     ${APACHE_CTL} configtest || (echo "php --version was failed" && exit 100 )
 }
 
+function show_fstab() {
+	echo %%%%% fstab follows
+	cat /etc/fstab
+	echo %%%%% fstab ends
+}
 
 set -e
 function main(){
@@ -135,6 +140,7 @@ function main(){
     test_playbook
     test_playbook_check
 #    extra_tests
+    show_fstab
 
 }
 

@@ -5,15 +5,16 @@
    pre_tasks:
      - name: create a file we will use to back a block device
        command: dd if=/dev/zero of=/opt/dev0-backstore bs=1M count=100 creates=/opt/dev0-backstore
-     - name: mknod to create /dev/fake-dev0
-       command: mknod /dev/fake-dev0 b 7 200 creates=/dev/fake-dev1
+     - name: mknod to create fake_dev
+       command: "mknod {{ fake_dev }} b 7 200 creates=/dev/fake-dev1"
      - name: losetup to make loop device point to backing file
-       command: losetup /dev/fake-dev0 /opt/dev0-backstore
+       command: "losetup {{ fake_dev }} /opt/dev0-backstore"
      - name: mkfs.ext4 on new device
-       command: mkfs.ext4 /dev/fake-dev0
+       command: "mkfs.ext4 {{ fake_dev }}"
    vars:
+     fake_dev: "/home/fake-dev0"
      nfs_mounts:
-       - { fstype: "ext4", name: "/mnt", src: "/dev/fake-dev0", state: "mounted", opts: "defaults" }
+       - { fstype: "ext4", name: "/mnt", src: "{{ fake_dev }}", state: "mounted", opts: "defaults" }
 
    roles:
      - ansible-role-nfs_mount

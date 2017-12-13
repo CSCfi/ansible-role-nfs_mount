@@ -3,18 +3,15 @@
  - hosts: localhost
    remote_user: root
    pre_tasks:
-     - name: create a file we will use to back a block device
-       command: dd if=/dev/zero of=/opt/dev0-backstore bs=1M count=100 creates=/opt/dev0-backstore
-     - name: mknod to create fake_dev
-       command: "mknod {{ fake_dev }} b 7 200 creates=/dev/fake-dev1"
-     - name: losetup to make loop device point to backing file
-       command: "losetup {{ fake_dev }} /opt/dev0-backstore"
-     - name: mkfs.ext4 on new device
-       command: "mkfs.ext4 {{ fake_dev }}"
+     - name: fetch an iso to mounting with
+       get_url:
+         url: "http://ftp.sh.cvut.cz/slax/Slax-9.x/slax-ipxe.iso"
+         dest: "/tmp/slax-ipxe.iso"
+         mode: 0640
+       
    vars:
-     fake_dev: "/home/fake-dev0"
      nfs_mounts:
-       - { fstype: "ext4", name: "/mnt", src: "{{ fake_dev }}", state: "mounted", opts: "defaults" }
+       - { fstype: "iso9660", name: "/mnt", src: "/tmp/slax-ipxe.iso", state: "mounted", opts: "defaults" }
 
    roles:
      - ansible-role-nfs_mount

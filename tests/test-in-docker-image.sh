@@ -123,9 +123,9 @@ function extra_tests(){
 }
 
 function show_fstab() {
-	echo %%%%% fstab follows
+	echo "TEST: fstab follows"
 	cat /etc/fstab
-	echo %%%%% fstab ends
+	echo "TEST: fstab ends"
 }
 
 set -e

@@ -1,67 +1,16 @@
 ---
 # tasks file for ansible-role-nfs_mount/
 
-- name: (DEPRECATED) Creates /home dir (if it doesn't exist)
-  file: 
-     path: /home
-     state: directory
-     mode: 0755
-  when: nfs_mount is defined
-
-- name: (DEPRECATED) Creates /scratch dir (if it doesn't exist)
-  file: 
-     path: "/scratch"
-     state: directory
-     mode: 0755
-  when: nfs_mount is defined
-
-## old method using lineinfile and editing fstab 
-
-- name: (DEPRECATED) lineinfile cleaning previous entries on /etc/fstab
-  lineinfile:
-       backup: no
-       dest: /etc/fstab
-       regexp: ".*/home\b.*$"
-       state: absent
-  when: nfs_mount is defined
-
-- name: (DEPRECATED) lineinfile cleaning previous entries on /etc/fstab
-  lineinfile: 
-       backup: no
-       dest: /etc/fstab
-       regexp: "^{{ nfs_mount_addr }}"
-       state: absent
-  when: nfs_mount is defined
-
-- name: (DEPRECATED) lineinfile populate /etc/fstab file with NFS mount points
-  lineinfile: 
-       dest: /etc/fstab
-       line: "{{ nfs_mount }}" 
-       state: present
-       backup: no
-  when: nfs_mount is defined
-
-- name: (DEPRECATED) lineinfile cleaning blank lines on /etc/fstab
-  lineinfile: 
-       dest: /etc/fstab
-       regexp: "^\\s*$"
-       state: absent
-       backup: no
-  when: nfs_mount is defined
-
-- name: (DEPRECATED) reloading mount points with mount -a
-  command: /usr/bin/mount -a
-  when: nfs_mount is defined
-
-## new method with the mount module
-
 - name: Create directories (if they do not exist) if nfs_mounts is defined
   file: 
      path: "{{ item.name }}"
      state: directory
      mode: "{{ item.dirmode | default ('0755') }}"
+     group: "{{ item.group | default(omit) }}"
+     owner: "{{ item.owner | default(omit) }}"
+     attributes: "{{ item.attributes | default(omit) }}"
   with_items: "{{ nfs_mounts }}"
-  when: nfs_mounts is defined and nfs_mounts.0 != {} and nfs_mount is not defined
+  when: nfs_mounts is defined
 
 - name: add mountpoints if nfs_mounts is defined and nfs_mount is not
   mount:
@@ -71,23 +20,4 @@
         state: "{{ item.state | default('mounted') }}"
         opts: "{{ item.opts | default('defaults') }}"
   with_items: "{{ nfs_mounts }}"
-  when: nfs_mounts is defined and nfs_mounts.0 != {} and nfs_mount is not defined
-
-- name: find backed up fstab files
-  find: 
-      paths: "/etc" 
-      patterns: "fstab.*~"
-  register: nfs_backup_files
-  changed_when: False
-  check_mode: no
-
-- debug:
-     var: nfs_backup_files
-     verbosity: 1
-
-- name: cleaning fstab backup files
-  file: 
-     path: "{{ item.path }}"
-     state: absent
-  with_items: '{{ nfs_backup_files.files }}'
-  when: clean_fstab_backups and nfs_backup_files.matched != 0
+  when: nfs_mounts is defined

@@ -12,17 +12,6 @@ An NFS server
 Role Variables
 --------------
 
-Old method **nfs_mount**:
-
-For example:
-<pre>
-nfs_mount: |
-  10.2.1.5:/scratch /scratch                nfs4 defaults 0 0
-  10.2.1.5:/home    /home                   nfs4 defaults 0 0
-</pre>
-
-New method **nfs_mounts**
-
 This only works if nfs_mount variable is not defined
 
 <pre>

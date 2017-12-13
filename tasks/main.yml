@@ -10,7 +10,9 @@
      owner: "{{ item.owner | default(omit) }}"
      attributes: "{{ item.attributes | default(omit) }}"
   with_items: "{{ nfs_mounts }}"
-  when: nfs_mounts is defined
+  when:
+    - nfs_mounts is defined
+    - item.name is defined
 
 - name: add mountpoints if nfs_mounts is defined and nfs_mount is not
   mount:
@@ -20,4 +22,7 @@
         state: "{{ item.state | default('mounted') }}"
         opts: "{{ item.opts | default('defaults') }}"
   with_items: "{{ nfs_mounts }}"
-  when: nfs_mounts is defined
+  when:
+    - nfs_mounts is defined
+    - item.name is defined
+    - item.src is defined

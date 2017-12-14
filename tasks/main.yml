@@ -1,8 +1,12 @@
 ---
 # tasks file for ansible-role-nfs_mount/
+- name: Fail if nfs_mount is defined
+  fail: 
+     msg: "nfs_mount is no longer supported. Change configuration to nfs_mounts instead"
+  when: nfs_mount is defined
 
-- name: Create directories (if they do not exist) if nfs_mounts is defined
-  file: 
+- name: Create directories (if they do not exist) from nfs_mounts
+  file:
      path: "{{ item.name }}"
      state: directory
      mode: "{{ item.dirmode | default ('0755') }}"
@@ -14,11 +18,11 @@
     - nfs_mounts is defined
     - item.name is defined
 
-- name: add mountpoints if nfs_mounts is defined and nfs_mount is not
+- name: add mountpoints from nfs_mounts
   mount:
         fstype: "{{ item.fstype | default('nfs4') }}"
-        name: "{{ item.name }}"  
-        src: "{{ item.src }}"  
+        name: "{{ item.name }}"
+        src: "{{ item.src }}"
         state: "{{ item.state | default('mounted') }}"
         opts: "{{ item.opts | default('defaults') }}"
   with_items: "{{ nfs_mounts }}"

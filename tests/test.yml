@@ -3,9 +3,15 @@
  - hosts: localhost
    remote_user: root
    pre_tasks:
-     - name: touch a fstab test file
-       file: path="/etc/fstab.2016-10-20@15:21:01~" state=touch
+     - name: fetch an iso to mounting with
+       get_url:
+         url: "http://ftp.sh.cvut.cz/slax/Slax-9.x/slax-ipxe.iso"
+         dest: "/tmp/slax-ipxe.iso"
+         mode: 0640
+       
    vars:
-     - clean_fstab_backups: True
+     nfs_mounts:
+       - { fstype: "iso9660", name: "/mnt", src: "/tmp/slax-ipxe.iso", state: "mounted", opts: "defaults" }
+
    roles:
      - ansible-role-nfs_mount

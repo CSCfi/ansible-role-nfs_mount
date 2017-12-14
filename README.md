@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/CSCfi/ansible-role-nfs_mount.svg)](https://travis-ci.org/CSCfi/ansible-role-nfs_mount)
-ansible-role-nfs_mount
+ansible-role-nfs\_mount
 =========
 
 Mounts NFS
@@ -12,19 +12,6 @@ An NFS server
 Role Variables
 --------------
 
-Old method **nfs_mount**:
-
-For example:
-<pre>
-nfs_mount: |
-  10.2.1.5:/scratch /scratch                nfs4 defaults 0 0
-  10.2.1.5:/home    /home                   nfs4 defaults 0 0
-</pre>
-
-New method **nfs_mounts**
-
-This only works if nfs_mount variable is not defined
-
 <pre>
 nfs_mounts:
  - { fstype: "nfs4", name: "/home", src: "{{ nfs_mount_addr }}:/home", state: "mounted", opts: "defaults" }
@@ -36,7 +23,7 @@ Notice how fstype defaults to "nfs4", state defaults to "mounted" and opts defau
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None
 
 Example Playbook
 ----------------

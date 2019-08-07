@@ -20,7 +20,7 @@
 
 - name: add mountpoints from nfs_mounts
   mount:
-        fstype: "{{ item.fstype | default('nfs4') }}"
+        fstype: "{{ item.fstype | default('nfs') }}"
         name: "{{ item.name }}"
         src: "{{ item.src }}"
         state: "{{ item.state | default('mounted') }}"

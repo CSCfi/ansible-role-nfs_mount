@@ -14,11 +14,11 @@ Role Variables
 
 <pre>
 nfs_mounts:
- - { fstype: "nfs4", name: "/home", src: "{{ nfs_mount_addr }}:/home", state: "mounted", opts: "defaults" }
+ - { fstype: "nfs", name: "/home", src: "{{ nfs_mount_addr }}:/home", state: "mounted", opts: "defaults" }
  - { name: "/scratch", src: "{{ nfs_mount_addr }}:/scratch", dirmode: "1777" }
 </pre>
 
-Notice how fstype defaults to "nfs4", state defaults to "mounted" and opts defaults to "defaults".
+Notice how fstype defaults to "nfs", state defaults to "mounted" and opts defaults to "defaults".
 
 Dependencies
 ------------

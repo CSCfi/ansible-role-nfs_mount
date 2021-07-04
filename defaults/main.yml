@@ -2,5 +2,5 @@
 # defaults file for ansible-role-nfs_mount/
 nfs_mounts:
   - {}
-# - { fstype: "nfs4", name: "/home", src: "{{ nfs_mount_addr }}:/home", state: "mounted", opts: "defaults" }
+# - { fstype: "nfs", name: "/home", src: "{{ nfs_mount_addr }}:/home", state: "mounted", opts: "defaults" }
 # - { name: "/scratch", src: "{{ nfs_mount_addr }}:/scratch", dirmode: "1777"}
